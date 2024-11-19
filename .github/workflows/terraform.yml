@@ -1,0 +1,33 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main  # Kjør når endringer blir pushet til 'main' grenen
+  pull_request:
+    branches:
+      - main  # Kjør på pull request til 'main' grenen
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest  # Bruker Ubuntu som operativsystem for å kjøre jobben
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # Henter koden din fra GitHub
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1  # Installerer Terraform på GitHub Actions-maskinen
+
+    - name: Initialize Terraform
+      run: terraform init  # Kjør terraform init
+
+    - name: Validate Terraform Configuration
+      run: terraform validate  # Kjør terraform validate for å sjekke konfigurasjonen
+
+    - name: Terraform Plan
+      run: terraform plan  # Kjør terraform plan for å se hva som vil bli endret
+
+    - name: Apply Terraform
+      run: terraform apply -auto-approve  # Kjør terraform apply for å implementere endringene
+      if: github.ref == 'refs/heads/main'  # Bare utfør dette på main grenen
